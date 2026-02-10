@@ -49,3 +49,6 @@ Các ký tự phức hợp được biểu diễn bằng cách **kết hợp nhi
   Ký tự phức hợp gồm **Th** đặt phía trên **Dd**, với ký hiệu thanh điệu ở góc trên bên phải.
 
 Cú pháp đầy đủ, định nghĩa các thành phần và các quy tắc hình thức được trình bày trong [Tài liệu đặc tả đầy đủ QATT-DC](SPEC.md).
+
+# Lookup table - Bảng tra
+![QATT Lookup Table](qatt-lookup-table.png)
