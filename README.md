@@ -21,8 +21,7 @@ More complex characters can be expressed by **combining multiple QATT codes** us
 - `⿱ThDd-2` → `芏꜂`  
   A compound character formed by placing **Th** above **Dd**, with a tone marker at the top-right.
 
-The complete syntax, component definitions, and formal rules are described in the  
-[QATT-DC Specification](spec.md).
+The complete syntax, component definitions, and formal rules are described in the [Full QATT-DC Specification](SPEC.md).
 
 ---
 
@@ -49,5 +48,4 @@ Các ký tự phức hợp được biểu diễn bằng cách **kết hợp nhi
 - `⿱ThDd-2` → `芏꜂`  
   Ký tự phức hợp gồm **Th** đặt phía trên **Dd**, với ký hiệu thanh điệu ở góc trên bên phải.
 
-Cú pháp đầy đủ, định nghĩa các thành phần và các quy tắc hình thức được trình bày trong  
-[Tài liệu đặc tả QATT-DC](spec.md).
+Cú pháp đầy đủ, định nghĩa các thành phần và các quy tắc hình thức được trình bày trong [Tài liệu đặc tả đầy đủ QATT-DC](SPEC.md).
