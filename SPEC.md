@@ -45,9 +45,9 @@
 ---
 
 ## 4. Notes
-- QATT-DC describes **visual structure only**; no semantic meaning.  
+- QATT Description Code describes **visual structure only**; no semantic meaning.  
 - Extensible to new letters, dot positions, tones, and IDS sequences.
 
 ## 5. Reference Table
 
-![QATT Lookup Table](qatt-dc-2026-02.png)
+![QATT Lookup Table](qatt.png)
