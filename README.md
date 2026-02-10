@@ -9,6 +9,8 @@ Since these signs are not currently encoded in Unicode, QATT-DC provides a consi
 **Mã mô tả QATT (QATT Description Code)** là một hệ thống ký hiệu ngắn gọn dùng để mô tả **cấu trúc hình thức** của các ký hiệu *Quốc Âm Tân Tự*.  
 Do các ký hiệu này hiện chưa được mã hóa trong Unicode, QATT-DC cung cấp một phương tiện thống nhất để **thảo luận, phân tích và dẫn chiếu** trong các tài liệu học thuật và kỹ thuật.
 
+[Go to full specification](SPEC.md)
+
 ## Scope
 - Describes **visual structure only**.  
 - Does **not define Unicode code points** or character identity.  
@@ -26,7 +28,7 @@ Do các ký hiệu này hiện chưa được mã hóa trong Unicode, QATT-DC cu
 - **IDS (Ideographic Description Sequence)**: Combine multiple QATT codes to represent complex characters, e.g. ⿱C1D6+4, ⿱G3H2-1
 
 **Example**:  
-- `Ch2-4` → Letter symbol `Ch`, dot at end of first stroke (2), half tone symbol placed in top left corner (-4).
+- `Ch2-4` → Letter symbol `Ch`, dot at end of first stroke (2), half tone symbol placed in bottom left corner (-4).
 - `⿱B1Kh4+3` → Combined character consisting of `B1` on top of `Kh4+3`.
 
 ## Examples
