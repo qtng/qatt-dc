@@ -28,7 +28,7 @@
     - 1/2 → beginning/end of first stroke  
     - 3/4 → beginning/end of second stroke  
     - 5/6 → beginning/end of third stroke  
-3. **Tone** – `+` = whole tone, `-` = half tone  
+3. **Tone** – `°` = whole tone symbol, `꜄` = half tone symbol 
     - Number indicates corner: 1 = top-left, 2 = top-right, 3 = bottom-right, 4 = bottom-left  
 4. **IDS** – Combines multiple QATT codes to represent complex characters
 
@@ -38,8 +38,9 @@
 
 | QATT-Code  | Description                                        | SVG |
 |------------|---------------------------------------------------|-----|
-| Tr1+8      | Base symbol Tr (廾) with dot at start of first stroke and half tone at position 4 (bottom-left) | ꜆牛 |
-| ⿱ThDd-2 | Combined character consisting of unmarked Th on top of Dd with half tone at position 2 (top-right) | 芏꜂ |
+| Tr1+8      | Base symbol Tr (廾) with dot at start of first stroke and half tone symbol at position 4 (bottom-left) | ꜆牛 |
+| Dd3 | Base symbol Dd (士) with dot at start of second stroke and full tone symbol at position 3 (bottom-right) | 壬。 |
+| ⿱ThDd-2 | Combined character consisting of unmarked Th on top of Dd with half tone symbol at position 2 (top-right) | 芏꜂ |
 
 ---
 
