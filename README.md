@@ -34,7 +34,7 @@ Do các ký hiệu Quốc Âm Tân Tự hiện chưa được mã hóa trong Uni
 ### Khái niệm cơ bản
 
 Một mã QATT mô tả **hình thức biểu hiện của ký hiệu**, không mô tả ý nghĩa ngữ nghĩa.  
-Mỗi mã bao gồm một **ký hiệu cơ sở**, có thể kèm theo **dấu phẩy** và **thanh điệu** để chỉ rõ vị trí hiển thị của chúng.  
+Mỗi mã bao gồm một **ký hiệu cơ sở** (cán tự), có thể kèm theo **dấu phẩy** và **thanh điệu** âm/dương để chỉ rõ vị trí hiển thị của chúng.  
 Các ký tự phức hợp được biểu diễn bằng cách **kết hợp nhiều mã QATT** thông qua các chuỗi mô tả chữ ý (IDS).
 
 **Ví dụ:**
