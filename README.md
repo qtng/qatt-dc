@@ -40,10 +40,10 @@ Các ký tự phức hợp được biểu diễn bằng cách **kết hợp nhi
 **Ví dụ:**
 
 - `Dd3+1` → `⁰壬`  
-  Ký hiệu cơ sở **Dd**, với dấu phẩy đặt tại đầu nét thứ hai với thanh điêu ở góc trên bên trái.
+  Chi tự **Dd**, với dấu phẩy đặt tại đầu nét thứ hai với thanh điêu ở góc trên bên trái.
 
 - `Tr1+4` → `꜀牛`  
-  Ký hiệu cơ sở **Tr**, với dấu phẩy ở đầu nét thứ nhất với thanh điệu ở góc dưới bên trái.
+  Chi tự **Tr**, với dấu phẩy ở đầu nét thứ nhất với thanh điệu ở góc dưới bên trái.
 
 - `⿱ThDd-2` → `芏꜄`  
   Ký tự phức hợp gồm **Th** đặt phía trên **Dd**, với thanh điệu ở góc trên bên phải.
