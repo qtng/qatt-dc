@@ -1,5 +1,7 @@
 # QATT Description Code – Specification
 
+Version: 0.1 preliminary
+
 ## 1. Syntax (BNF)
 
 ```text
