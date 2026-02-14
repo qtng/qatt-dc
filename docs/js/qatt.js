@@ -456,7 +456,7 @@ const qatt = new Animation({
           }
           return attrs
      }
- )}
+})
 
 const marks = new Animation({
         autostart: false,
