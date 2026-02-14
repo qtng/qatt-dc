@@ -91,18 +91,27 @@
         
         "a": "h",
         "ă": "H",
+        "wa": "龷",
+        "wă": "龷",
         "ơ": "r",
+        "wơ": "万",
         "â": "R",
+        "wâ": "万",
         "ê": "nh",
+        "wê": "友",
         "e": "NH",
+        "we": "友",
         "i": "gi",
+        "wi": "太",
         "ia": "GI",
+        "wia": "太",
         "ô": "ph",
         "o": "PH",
         "u": "v",
         "ua": "V",
         "ư": "g",
         "ưa": "G",
+        
         "ngang": "<⸤",
         "sắc": "⸣",
         "huyền": "<ₒ",
@@ -284,7 +293,11 @@
       tokens.forEach((t) => {
         if (t.vowel) {
           const head = this.chars[t.onset] || t.onset
-          const medial = t.medial ? this.chars["u"] : ""
+          let medial = t.medial ? this.chars["u"] : ""
+          if (medial && this.chars["w" + t.vowel]) {
+            t.vowel = "w" + t.vowel
+            medial = ""
+          }
           const vowelTmp = this.chars[t.vowel] || t.vowel
           let vowel = this.chars[vowelTmp.toLowerCase()] || vowelTmp
           if (vowelTmp == vowelTmp.toUpperCase()) {
