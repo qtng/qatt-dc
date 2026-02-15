@@ -140,9 +140,9 @@
       this.root = root
       this.output = output
       root.addEventListener("input", this.handleInput.bind(this))
-      document.getElementById("cursive").addEventListener("click", this.handleInput.bind(this))
-      document.getElementById("brackets").addEventListener("click", this.handleInput.bind(this))
-      document.getElementById("markneutral").addEventListener("click", this.handleInput.bind(this))
+      document.querySelectorAll("#cursive, #brackets, #markneutral, #mergemedials").forEach((el)=>{
+        el.addEventListener("click", this.handleInput.bind(this))
+      })
     }
     
     Writer.prototype.parseWord = function(word) {
