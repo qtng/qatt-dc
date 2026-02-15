@@ -30,14 +30,14 @@
     
     
     <div class="d-flex flex-md-column align-items-stretch" style="min-height:50vh">
-      <div class="position-relative me-2 m-md-0 alert alert-secondary m-0 p-2 pt-4" style="flex-basis:60%; text-wrap: balance; font-size:.95rem">
+      <div class="position-relative me-2 m-md-0 alert alert-secondary m-0 p-2 pt-3" style="flex-basis:60%; text-wrap: balance; font-size:.95rem">
         <div id="output"></div>
-        <button class="btn btn-sm btn-outline-primary position-absolute top-0 end-0 px-3 py-0 m-1" onclick="navigator.clipboard.writeText(document.getElementById('output').innerText)">
+        <button class="btn btn-sm btn-link position-absolute top-0 end-0 px-3 py-0 m-1" onclick="navigator.clipboard.writeText(document.getElementById('output').innerText)">
           Copy
         </button>
       </div>
       <div class="d-flex flex-column" style="flex-basis:40%">
-        <textarea class="flex-grow-1 form-control mb-2 p-2 pt-4" id="writer" style="min-height:10em; font-size:.95rem" placeholder="bắt đầu viết ở đây..."></textarea>
+        <textarea class="flex-grow-1 form-control mb-2 p-2 pt-3" id="writer" style="min-height:10em; font-size:.95rem" placeholder="bắt đầu viết ở đây...">quốc âm tân tự</textarea>
         <label>
           <input id="simplified" type="checkbox">
           simplified forms
@@ -155,12 +155,13 @@
       document.querySelectorAll("#simplified, #simplified2").forEach((el)=>{
         el.addEventListener("click", (ev) => {
           const checked = ev.target.checked;
-          document.getElementById("simplified").checked = checked;
-          document.getElementById("simplified2").checked = checked;
-          document.getElementById("reference").src = "qatt-" + (checked?"simplified":"traditional") + ".jpg";
-          this.handleInput();
+          document.getElementById("simplified").checked = checked
+          document.getElementById("simplified2").checked = checked
+          document.getElementById("reference").src = "qatt-" + (checked?"simplified":"traditional") + ".jpg"
+          this.handleInput()
         })
       })
+      this.handleInput()
     }
     
     Writer.prototype.parseWord = function(word) {
