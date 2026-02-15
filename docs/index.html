@@ -34,8 +34,8 @@
       <div class="d-flex flex-column" style="flex-basis:40%">
         <textarea class="flex-grow-1 form-control mb-2 p-2" id="writer" style="min-height:10em; font-size:.95rem" placeholder="bắt đầu viết ở đây..."></textarea>
         <label>
-          <input id="cursive" type="checkbox">
-          cursive forms
+          <input id="simplified" type="checkbox">
+          simplified forms
         </label>
         <label>
           <input id="brackets" type="checkbox">
@@ -54,10 +54,16 @@
 
     <div class="mt-5">
       <div class="w-auto mx-auto">
-      <b>Bản QATT theo chính tả đơn giản hoá, dạng điều chỉnh (cursive)</b>
-      <a href="qatt-simplified.jpg">
-        <img src="qatt-simplified.jpg" style="max-width:100%">
-      </a>
+        <div class="mb-3 d-flex justify-content-between">
+          <big class="fw-bold">Reference</big>
+          <label>
+            <input type="checked" id="simplified2">
+            simplified
+          </label>
+        </div>
+        <a id="reference" href="qatt-simplified.jpg">
+          <img src="qatt-simplified.jpg" style="max-width:100%">
+        </a>
       </div>
     </div>
   </div>
@@ -123,25 +129,34 @@
         "ngã": "<°",
         "nặng": "°",
       }
-      this.cursive = {}
-      this.cursive["≡"] = "三"
-      this.cursive[this.chars.b] = "丄"
-      this.cursive[this.chars.d] = "亽"
-      this.cursive[this.chars.r] = "冂"
-      this.cursive[this.chars.s] = "凵"
-      this.cursive[this.chars.kh] = "匸"
-      this.cursive[this.chars.x] = "コ"
-      this.cursive[this.chars.ph] = "⊣"
-      this.cursive[this.chars.v] = "卜"
-      this.cursive[this.chars.g] = "に"
-      this.cursive[this.chars.ng] = "丌"
-      this.cursive[this.chars.m] = "ㄡ"
+      this.simplified = {}
+      this.simplified["≡"] = "三"
+      this.simplified[this.chars.b] = "丄"
+      this.simplified[this.chars.d] = "亽"
+      this.simplified[this.chars.r] = "冂"
+      this.simplified[this.chars.s] = "凵"
+      this.simplified[this.chars.kh] = "匸"
+      this.simplified[this.chars.x] = "コ"
+      this.simplified[this.chars.ph] = "⊣"
+      this.simplified[this.chars.v] = "卜"
+      this.simplified[this.chars.g] = "に"
+      this.simplified[this.chars.ng] = "丌"
+      this.simplified[this.chars.m] = "ㄡ"
       
       this.root = root
       this.output = output
       root.addEventListener("input", this.handleInput.bind(this))
-      document.querySelectorAll("#cursive, #brackets, #markneutral, #mergemedials").forEach((el)=>{
+      document.querySelectorAll("#brackets, #markneutral, #mergemedials").forEach((el)=>{
         el.addEventListener("click", this.handleInput.bind(this))
+      })
+      document.querySelectorAll("#simplified, #simplified2").forEach((el)=>{
+        el.addEventListener("click", (el) => {
+          const checked = el.checked;
+          document.getElementById("simplified").checked = checked;
+          document.getElementById("simplified2").checked = checked;
+          document.getElementById("reference").src = "qatt-" + (checked?"simplified":"traditional") + ".jpg";
+          this.handleInput.bind(this);
+        })
       })
     }
     
@@ -328,9 +343,9 @@
           output += t.word
         }
       })
-      if (document.getElementById("cursive").checked) {
-        Object.keys(this.cursive).forEach((k) => {
-          output = output.replaceAll(k, this.cursive[k])
+      if (document.getElementById("simplified").checked) {
+        Object.keys(this.simplified).forEach((k) => {
+          output = output.replaceAll(k, this.simplified[k])
         })
       }
       if (document.getElementById("brackets").checked) {
