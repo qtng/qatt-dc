@@ -150,8 +150,8 @@
         el.addEventListener("click", this.handleInput.bind(this))
       })
       document.querySelectorAll("#simplified, #simplified2").forEach((el)=>{
-        el.addEventListener("click", (el) => {
-          const checked = !el.checked;
+        el.addEventListener("click", (ev) => {
+          const checked = ev.target.checked;
           document.getElementById("simplified").checked = checked;
           document.getElementById("simplified2").checked = checked;
           document.getElementById("reference").src = "qatt-" + (checked?"simplified":"traditional") + ".jpg";
