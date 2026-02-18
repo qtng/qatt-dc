@@ -316,7 +316,7 @@
       let output = ""
       tokens.forEach((t) => {
         if (t.vowel) {
-          const head = this.chars[t.onset] || t.onset
+          let head = this.chars[t.onset] || t.onset
           if (head) head = "'" + head
           let medial = t.medial ? this.chars["u"] : ""
           if (medial && this.chars["w" + t.vowel] && document.getElementById("mergemedials").checked) {
