@@ -27,13 +27,13 @@ Version: 0.1 preliminary
 ## 2. Component Meaning
 
 1. **Base Symbol** – Base symbol (cán tự) from Quốc Âm Tân Tự, the symbol name is case sensitive, i.e. first letter is uppercase and subsequent letters are lowercase.  
-2. **Dot Marking** – Optional dot (phẩy), the number indicates placement of dot. If the number is preceeed by a "•", the number indicates the order according to the original QATT instructions from the 19th century. Otherwise the number indicates the placement on **rectangle strokes** or **support stroke**. Here **rectangle strokes** are the outermost parallel strokes of a character or the crossing strokes if no parallel strokes exist in a character. The corners of the rectangle or parallelogram formed by the rectangle strokes provide the placement positions 1 to 4 in clockwise order, while the remaining **support stroke** provides the placement positions 5 and 6:
-   * 1: placement on top left of rectangle strokes
-   * 2: placement on top right of rectangle strokes
-   * 3: placement on bottom right of rectangle strokes
-   * 4: placement on bottom left of rectangle strokes
-   * 5: placement on start of support stroke
-   * 6: placement on send of support stroke
+2. **Dot Marking** – Optional dot (phẩy), the number indicates placement of dot. If the number is preceeed by a "•", the number indicates the order according to the original QATT instructions from the 19th century. Otherwise the number indicates placement as the corner number on **main stroke** or **support rectangle**. The **main stroke** is the stroke that connects all other strokes or lies between or next to them. The **support rectangle** is the rectangle or parallelogram that is formed by the the remaining support strokes. The placement positions 1 to 4 indicate the corners on the support rectangle in clockwise order, while positions 5 and 6 indicate the start and end of the main stroke:
+   * 1: placement on top left of support rectangle
+   * 2: placement on top right of support rectangle
+   * 3: placement on bottom right of support rectangle
+   * 4: placement on bottom left of support rectangle
+   * 5: placement on start of main stroke
+   * 6: placement on send of main stroke
 3. **Tone** – `°` = whole tone symbol (thanh điệu dương), `꜄` = half tone symbol (thanh điệu âm)
     - Number indicates corner: 1 = top-left, 2 = top-right, 3 = bottom-right, 4 = bottom-left  
 4. **IDS** – Combines multiple QATT codes to represent complex characters
@@ -44,8 +44,8 @@ Version: 0.1 preliminary
 
 | QATT-Code  | Description                                        | SVG |
 |------------|---------------------------------------------------|-----|
-| Tr1+8 or Tr•1+8 | Base symbol Tr (廾) with dot in first position according to QATT, i.e. begin of first stroke, and half tone symbol at position 4 (bottom-left) | ꜀升 |
-| Dd1+1 or Dd•3+1 | Base symbol Dd (士) with dot in first losition according QATT, i.e. at start of second stroke, and full tone symbol at position 1 (top-left) | ⁰壬 |
+| Tr1+8 | Base symbol Tr (廾) with dot on top left of support rectangle and half tone symbol at position 4 (bottom-left) | ꜀升 |
+| Dd1+1 | Base symbol Dd (士) with dot at start of main stroke and full tone symbol at position 1 (top-left) | ⁰壬 |
 | ⿱ThDd-2 | Combined character consisting of unmarked Th on top of Dd with half tone symbol at position 2 (top-right) | 芏꜄ |茱
 
 ---
