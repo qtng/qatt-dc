@@ -89,14 +89,14 @@
         "kh": "⋝",
         "l": "川",
         "m": "又",
-        "n": "|ⵜ",
+        "n": "|+",
         "ng": "π",
         "nh": "夊",
         "ph": "×|",
         "qu": "c",
         "r": "ɴ",
         "s": "и",
-        "t": "ⵜ|",
+        "t": "+|",
         "th": "卄",
         "tr": "干",
         "v": "ǀ×",
@@ -317,6 +317,7 @@
       tokens.forEach((t) => {
         if (t.vowel) {
           const head = this.chars[t.onset] || t.onset
+          if (head) head = "'" + head
           let medial = t.medial ? this.chars["u"] : ""
           if (medial && this.chars["w" + t.vowel] && document.getElementById("mergemedials").checked) {
             t.vowel = "w" + t.vowel
