@@ -501,6 +501,7 @@ function writeQATT(root, codes, options) {
 let opts = {
       mapping: {},
       dotmap: {
+            '?': [1,3,5,6,4,2],
             'b': [3,2,5,6,4,1],
             'c': [1,3,4,6,5,2],
             'ch': [5,1,3,6,4,2],
