@@ -498,7 +498,14 @@ const marks = new Animation({
 
 
 function writeQATT(root, codes, opts) {
-    opts = {mapping: {}, ...(opts ||{})}
+    opts = {
+      mapping: {},
+      dotmap: {
+        'b': [3,2,5,6,4,1],
+        'c': [1,3,4,6,5,2],
+        'ch': [5,1,3,6,4,2],
+        'dd': [3,1,4,5,6,2],
+      },...(opts ||{})}
     codes
     .trim()
     .split(/\s+/)
@@ -514,6 +521,8 @@ function writeQATT(root, codes, opts) {
         if (opts.mapping[code]) code = opts.mapping[code] || code
         const dot = s.split(/[+-]/)[0].replace(/\D/g, "")
         let tone = "" + parseInt((s.split(/[+-]/)[1] || "").replace(/\D/g, "") || 0)
+        const dotmap = opts.dotmap[code.toLowerCase()]
+        if (dotmap) dot = dotmap[dot - 1]
         
         if (tone && s.indexOf("-") >= 0) tone = "" + (parseInt(tone) + 4)
         const chars = qatt.print(
