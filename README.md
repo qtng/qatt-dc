@@ -13,9 +13,9 @@ More complex characters can be expressed by **combining multiple QATT codes** us
 **Examples:**
 
 - `Dd5+1` → `⁰壬`  
-  Base symbol **Dd**, with a dot placed at the start of the vertical **main stroke** and a full tine symbol in the top left corner.
+  Base symbol **Dd**, with a dot placed at the start of the vertical **main stroke** and a full tone symbol in the top left corner.
 
-- `Ch1-4` → `꜆牛`  
+- `Ch1-3` → `꜆牛`  
   Base symbol **Ch**, with a dot on the top left of the **support rectangle** and a half tone marker in the bottom-left corner.
 
 - `⿱ThDd-2` → `芏꜂`  
@@ -42,8 +42,8 @@ Các ký tự phức hợp được biểu diễn bằng cách **kết hợp nhi
 - `Dd5+1` → `⁰壬`  
   Cán tự **Dd**, với dấu phẩy đặt tại đầu **nét chính** với thanh điêu dương ở góc trên bên trái.
 
-- `Ch1-4` → `꜀牛`  
-  Cán tự **Ch**, với dấu phẩy ở trên bên trái của hình chữ nhật của **nét phụ** với thanh điệu dương ở góc dưới bên trái.
+- `Ch1-3` → `꜀牛`  
+  Cán tự **Ch**, với dấu phẩy ở trên bên trái của hình chữ nhật của **nét phụ** với thanh điệu âm ở góc dưới bên trái.
 
 - `⿱ThDd-2` → `芏꜄`  
   Chữ phức hợp gồm **Th** đặt phía trên **Dd**, với thanh điệu âm ở góc trên bên phải.
