@@ -497,8 +497,8 @@ const marks = new Animation({
     })
 
 
-function writeQATT(root, codes, opts) {
-    opts = {
+function writeQATT(root, codes, options) {
+let opts = {
       mapping: {},
       dotmap: {
             'b': [3,2,5,6,4,1],
@@ -522,7 +522,7 @@ function writeQATT(root, codes, opts) {
             'v': [1,2,4,6,3,5],
             'x': [1,3,4,5,6,2]
       },
-      ...(opts ||{})
+      ...(options ||{})
     }
     codes
     .trim()
