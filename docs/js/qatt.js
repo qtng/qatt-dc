@@ -537,7 +537,7 @@ let opts = {
         }
         let code = s.replace(/[^a-zA-Z?]/g, "")
         if (opts.mapping[code]) code = opts.mapping[code] || code
-        const dot = s.split(/[+-]/)[0].replace(/\D/g, "")
+        let dot = s.split(/[+-]/)[0].replace(/\D/g, "")
         let tone = "" + parseInt((s.split(/[+-]/)[1] || "").replace(/\D/g, "") || 0)
         const dotmap = opts.dotmap[code.toLowerCase()]
         if (dotmap) dot = dotmap[dot - 1]
