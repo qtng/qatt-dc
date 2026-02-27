@@ -1,5 +1,5 @@
 let qattOptions = document.querySelector("[data-qatt]");
-if (qattOptions) qattOptions = JSON.stringify.qattOptions.dataset.qatt)
+if (qattOptions) qattOptions = JSON.stringify(qattOptions.dataset.qatt)
 
 ((window) => {
       function Animation(root, attrs, glyphs, opts) {
