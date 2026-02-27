@@ -1,6 +1,7 @@
 let qattOptionsData = document.querySelector("[data-qatt]");
 const qattOptions = {
       convert: ".qatt",
+      selector: "qatt",
       mapping: {},
       ...(qattOptionsData ? JSON.parse(qattOptionsData.dataset.qatt) : {})
 }
