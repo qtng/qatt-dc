@@ -1,6 +1,20 @@
-let qattOptions = document.querySelector("[data-qatt]");
-if (qattOptions) qattOptions = JSON.stringify(qattOptions.dataset.qatt)
+let qattOptionsData = document.querySelector("[data-qatt]");
+const qattOptions = {
+      convert: ".qatt",
+      mapping: {"đ": "dd"},
+      ...(qattOptionsData ? JSON.parse(qattOptionsData.dataset.qatt) : {})
+}
 
+if (qattOptions.lfix) {
+      qattOptions.mapping = {
+            "ng": "l",
+            "h": "ng",
+            "g": "h",
+            "c": "g"
+            "l": "c",
+            ...qattOptions.mapping
+      }
+}
 ((window) => {
       function Animation(root, attrs, glyphs, opts) {
         if (typeof root === "object") {
@@ -540,7 +554,7 @@ let opts = {
             return
         }
         let code = s.replace(/[^a-zA-Z?]/g, "")
-        if (opts.mapping[code]) code = opts.mapping[code] || opts.mapping[code.toLowerCase()] || code
+        code = opts.mapping[code] || opts.mapping[code.toLowerCase()] || code
         let dot = s.split(/[+-]/)[0].replace(/\D/g, "")
         let tone = "" + parseInt((s.split(/[+-]/)[1] || "").replace(/\D/g, "") || 0)
         const dotmap = opts.dotmap[code.toLowerCase()]
