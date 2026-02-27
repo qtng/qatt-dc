@@ -1,3 +1,6 @@
+let qattOptions = document.querySelector("[data-qatt]");
+if (qattOptions) qattOptions = JSON.stringify.qattOptions.dataset.qatt)
+
 ((window) => {
       function Animation(root, attrs, glyphs, opts) {
         if (typeof root === "object") {
@@ -500,7 +503,7 @@ const marks = new Animation({
 function writeQATT(root, codes, options) {
 let opts = {
       mapping: {},
-      dotmap: {
+      dotmap: qattOptions.dotmap || {
             '?': [1,3,5,6,4,2],
             'b': [3,2,5,6,4,1],
             'c': [1,3,4,6,5,2],
@@ -537,7 +540,7 @@ let opts = {
             return
         }
         let code = s.replace(/[^a-zA-Z?]/g, "")
-        if (opts.mapping[code]) code = opts.mapping[code] || code
+        if (opts.mapping[code]) code = opts.mapping[code] || opts.mapping[code.toLowerCase()] || code
         let dot = s.split(/[+-]/)[0].replace(/\D/g, "")
         let tone = "" + parseInt((s.split(/[+-]/)[1] || "").replace(/\D/g, "") || 0)
         const dotmap = opts.dotmap[code.toLowerCase()]
@@ -569,11 +572,15 @@ let opts = {
   window.addEventListener(
     "load",
     ()=>{
-      document.querySelectorAll(".qatt").forEach((el)=>{
+      document.querySelectorAll(qattOptions.convert).forEach((el)=>{
         const t = el.innerText
         el.innerHTML = ""
-        let opts = JSON.parse(el.dataset.opts || "{}")
-        writeQATT(el, t, {size: Number(el.dataset.size || 24), ...opts})
+        let opts = {
+          size: Number(el.dataset.size || 24),
+          ...qattOptions.opts,
+          ...(el.dataset.opts ? JSON.parse(el.dataset.opts) : {})
+        }
+        writeQATT(el, t, opts)
       })
     }
   );
