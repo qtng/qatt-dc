@@ -518,7 +518,7 @@ const marks = new Animation({
 function writeQATT(root, codes, options) {
 let opts = {
       mapping: {},
-      dotmap: qattOptions.dotmap || {
+      dotmap: {
             '?': [1,3,5,6,4,2],
             'b': [3,2,5,6,4,1],
             'c': [1,3,4,6,5,2],
@@ -539,8 +539,9 @@ let opts = {
             'th': [1,5,2,4,6,3],
             'tr': [1,5,3,6,4,2],
             'v': [1,2,4,6,3,5],
-            'x': [1,4,5,6,3,2]
+            'x': [1,4, 5,6,3,2]
       },
+      ...qattOptions,
       ...(options ||{})
     }
     codes
