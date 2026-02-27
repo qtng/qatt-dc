@@ -1,7 +1,7 @@
 let qattOptionsData = document.querySelector("[data-qatt]");
 const qattOptions = {
       convert: ".qatt",
-      mapping: {"đ": "dd"},
+      mapping: {},
       ...(qattOptionsData ? JSON.parse(qattOptionsData.dataset.qatt) : {})
 }
 
@@ -10,7 +10,7 @@ if (qattOptions.lfix) {
             "ng": "l",
             "h": "ng",
             "g": "h",
-            "c": "g"
+            "c": "g",
             "l": "c",
             ...qattOptions.mapping
       }
