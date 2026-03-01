@@ -98,6 +98,7 @@ if (qattOptions.lfix) {
             glyph = document.createElementNS(SVG_NS, "path")
             glyph.classList.add("glyph")
             glyph.setAttribute("d", this.glyphs[g][0])
+            glyph.setAttribute("vector-effect", "non-scaling-stroke")
             Object.keys(this.opts.pathAttrs).forEach((k) => glyph.setAttribute(k,this.opts.pathAttrs[k]))
             this.svg.append(glyph)
             step = 0;
