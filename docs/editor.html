@@ -16,10 +16,13 @@ document.body.addEventListener("click", function(e){
 <b style="color:var(--clr)">
 Tiểu Tân Tự
 </b>
-<select style="border-radius:100px;zoom:200%;position:fixed;bottom:12px;right:2px" onchange="display(parseInt(this.value)); event.stopPropagation(); return; var d=document.getElementById('zoom');d.value=0;d.oninput();">
-<option value=1>QATT gốc</option>
-<option value=2>QATT giản thể</option>
-</select>
+<select style="border-radius:100px;zoom:200%;width:6.5em;position:fixed;bottom:12px;right:.5em"
+	onclick="event.stopPropagation()"
+	onchange="
+	display(parseInt(this.value));
+	document.getElementById('writer').dispatchEvent(new Event('input'));
+	event.stopPropagation();
+">
 <input type="button" value="&#x1F3A8;" style="border-radius:100px;zoom:200%;position:fixed;bottom:12px;left:2px" onclick="event.stopPropagation();body.className=!body.className?'light':body.className=='light'?'dark':''">
 <!--<input id="zoom" style="zoom:200%;position:fixed;bottom:2px;left:11.5vw;width:25vw"
 	type="range" step="1"
