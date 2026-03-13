@@ -685,6 +685,8 @@ g:nth-child(-n+26) g:nth-child(23){transform:translate(2440px)}
       if(onset == "qu") {
           medial = "o"
       }
+
+	  if ((coda == "nh" || coda == "ch") && vowel == "a") vowel = "ă";
       
       // --- find medial ---
       if (vowel.length >= 2) {
