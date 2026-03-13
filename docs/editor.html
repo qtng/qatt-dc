@@ -20,7 +20,6 @@ Tiểu Tân Tự
 	onclick="event.stopPropagation()"
 	onchange="
 	display(parseInt(this.value));
-	document.getElementById('writer').dispatchEvent(new Event('input'));
 	event.stopPropagation();
 ">
 <option value=1>QATT gốc</option>
@@ -35,8 +34,8 @@ Tiểu Tân Tự
 document.getElementById('content').style.transform='scale('+v+')'">
 -->
 <div xxxxonclick="event.stopPropagation();" style="padding:1em; zoom:37%; left:0;width:100%;position:absolute;z-index:1000">
-<textarea style="width:100%;zoom:3" id="writer"></textarea>
-<div id="output" style="background:gray">hallo</div>
+<textarea style="width:100%;zoom:3" id="writer" onfocus="this.select()">Quốc âm tân tự</textarea>
+<div id="output" style="background:gray"></div>
 </div>
 
 <div style="position:absolute;top:150px;width:100%;left:0;bottom:60px;overflow:auto">
@@ -1337,8 +1336,9 @@ paBr(2);
 
 
 window.pa = pa
-
+document.getElementById('writer').dispatchEvent(new Event('input'));
 }
+
 display()
 </script>
 
