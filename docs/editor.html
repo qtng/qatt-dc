@@ -1142,17 +1142,18 @@ function paSvg(root, initial, vowel, final, tone, bold, isCoda) {
 	var color = initial && initial.indexOf("$") >= 0 ? 1 : 0;
 	var underline = initial && initial.indexOf("#") >= 0 ? 1 : 0;
 	svg.setAttribute("class", "char" + (underline?" underline":"") + (color?" color":""));
+	
 	if (initial) {
 		initial = initial.replace("#", "").replace("$", "");
 		var post = getPost(vowel.charAt(0)=="w", vowel)
 		var id = onset_prefix + initial+ '-' + post;
 		if (!document.getElementById(id)) {
-		id = id.replace("xx", "x").replace("large", "xxsmall")
+		id = id.replace("xxsmall", "xsmall").replace("large", "xxsmall")
 		}
 		if (!document.getElementById(id)) {
-		id = id.replace("x", "")
+		id = id.replace("xsmall", "small")
 		}
-		if (!document.getElementById(id)) id = id.replace("x", "")
+		if (!document.getElementById(id)) id = id.replace("xsmall", "small")
 		useG(g, id);
 	}
 	if (vowel) {
