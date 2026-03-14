@@ -985,7 +985,7 @@ group.appendChild(text);
 svg.appendChild(group);
 
 
-// ONSETS WITH MEDIAL
+	// ONSETS WITH MEDIAL
 svg.appendChild(document.createElementNS(svgns, "g"));
 group = document.createElementNS(svgns, "g");
 text = document.createElementNS(svgns, "text");
@@ -993,31 +993,31 @@ text.appendChild(document.createTextNode("ʔʷ Cʷ Chʷ Dʷ Dʷ Hʷ Khʷ Lʷ Ng�
 text.setAttribute("style", "word-spacing:18px; font-size:56px; transform: translate(350px, 60px)");
 group.appendChild(text);
 svg.appendChild(group);
-group = document.createElementNS(svgns, "g");
 text = document.createElementNS(svgns, "text");
 text.appendChild(document.createTextNode("Bán âm + /w/"));
-text.setAttribute("style", "font-size:44px; transform: translate(0, 40px)");
+text.setAttribute("style", "font-size:44px; transform: translate(0, 60px)");
 group.appendChild(text);
 svg.appendChild(group);
-"  _ c ch d dz h kh l ng nh s".split(" ").forEach((t) => {
+group = document.createElementNS(svgns, "g");
+"   _ c ch d dz h kh l ng nh s".split(" ").forEach((t) => {
 	var g = addG(group, onset_prefix+t+"-small");
 	useG(g, onset_prefix+t+"-medial")
 	group.appendChild(g)
 });
-group = document.createElementNS(svgns, "g");
 svg.appendChild(group);
+group = document.createElementNS(svgns, "g");
 "   t th tr x".split(" ").forEach((t) => {
 	var g = useG(addG(group), onset_prefix+t+"-small");
 	useG(g, onset_prefix+t+"-medial")
 	group.appendChild(g)
 });
+svg.appendChild(group);
 group = document.createElementNS(svgns, "g");
 text = document.createElementNS(svgns, "text");
 text.appendChild(document.createTextNode("Tʷ Thʷ Trʷ Xʷ"));
 text.setAttribute("style", "word-spacing:18px; font-size:56px; transform: translate(350px, 60px)");
 group.appendChild(text);
 svg.appendChild(group);
-
 
 
 // NUCLEUS
