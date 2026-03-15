@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>QATT App - Spaced Repetition</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .qatt-container { max-width: 500px; margin: 2rem auto; }
+    .card { position: relative; border-radius: 15px; overflow: hidden; }
+    .fade-in { animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .symbol-card { background: #f8f9fa; min-height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+    .symbol-card img { max-height: 120px; width: auto; }
+    
+    .feedback-area {
+      position: absolute; top: 30%; left: 50%; width: 100%;
+      text-align: center; z-index: 100; pointer-events: none;
+      transform: translate(-50%, -50%); opacity: 0;
+    }
+    .float-up-fade { animation: floatUpFade 1.6s ease-in-out forwards; }
+    @keyframes floatUpFade {
+      0% { opacity: 0; transform: translate(-50%, -50%); }
+      15% { opacity: 1; transform: translate(-50%, -80%); }
+      85% { opacity: 1; transform: translate(-50%, -80%); }
+      100% { opacity: 0; transform: translate(-50%, -120%); }
+    }
+    .alert-custom-success { color: #28a745; font-size: 2rem; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .alert-custom-danger { color: #dc3545; font-size: 1.5rem; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  /* Der Container des Balkens */
+.progress {
+  background-color: #eee;
+  border-radius: 10px;
+  height: 10px !important;
+  overflow: hidden;
+}
+
+/* Der animierte Balken */
+.progress-bar {
+  background: linear-gradient(90deg, #28a745, #5cd677);
+  border-radius: 10px;
+  /* Dies ist der entscheidende Teil für die Animation */
+  transition: width .8s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+  .list-group-item {
+  background: rgba(255, 255, 255, 0.8);
+  transition: background 0.2s;
+}
+.list-group-item:hover {
+  background: rgba(255, 255, 255, 1);
+}
+/* Scrollbar für die Liste verschönern */
+.list-group::-webkit-scrollbar { width: 6px; }
+.list-group::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container qatt-container">
+    <h1 class="text-center mb-4">QATT App</h1>
+    <div id="app"></div>
+  </div>
+
+  <script>
+  
+  
+
+class App {
+  constructor(container, options) {
+    this.opts = {
+      symbolFormatter: (s, t) => [s, t],
+      reverseFormatter: (s, t) => [t, s],
+      background: "white",
+      requiredCorrect: 2,
+      maxErrors: 3,
+      activeLimit: 3,
+      ...(options || {})
+    };
+
+    this.mainContainer = container;
+    this.lessons = {};
+    this.currentLesson = null;
+
+    // Daten aus LocalStorage laden
+    this.stats = JSON.parse(localStorage.getItem('qatt_stats')) || {};
+    this.highscores = JSON.parse(localStorage.getItem('qatt_highscores')) || {};
+
+    // Grundgerüst initialisieren
+    this.initLayout();
+    
+    this.audioCtx = null;
+  
+  // Einmaliger Listener, um den AudioContext bei der ersten Interaktion zu starten
+    const unlockAudio = () => {
+      if (!this.audioCtx) {
+        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+      }
+      // Listener entfernen, sobald Audio entsperrt ist
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+    };
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
+  };
+
+  initLayout() {
+    this.mainContainer.innerHTML = `
+      <div id="qatt-stats-wrapper" class="mb-4 d-none">
+        <div class="card shadow-sm p-3 border-0" style="border-radius: 15px">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <button id="qatt-back-btn" class="btn btn-sm btn-outline-secondary me-3" style="border-radius: 8px;">Back</button>
+              <span id="qatt-lesson-title" class="fw-bold small text-uppercase text-secondary" style="letter-spacing: 1px;"></span>
+            </div>
+            <span id="qatt-progress-percent" class="badge rounded-pill bg-success px-3">0%</span>
+          </div>
+          <div class="progress" style="height: 10px; background-color: #f0f0f0; border-radius: 10px; overflow: hidden;">
+            <div id="qatt-progress-bar" 
+                 class="progress-bar" 
+                 style="width: 0%; transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1) !important; background: linear-gradient(90deg, #28a745, #5cd677);">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="qatt-content"></div>
+    `;
+
+    this.statsWrapper = document.getElementById("qatt-stats-wrapper");
+    this.contentArea = document.getElementById("qatt-content");
+    this.progressBar = document.getElementById("qatt-progress-bar");
+    this.progressPercent = document.getElementById("qatt-progress-percent");
+    this.lessonTitle = document.getElementById("qatt-lesson-title");
+
+    document.getElementById("qatt-back-btn").onclick = () => this.renderLibrary();
+  }
+
+  addLesson(opts) {
+    const id = opts.id;
+    const name = opts.title;
+    const items = opts.items;
+    const background = opts.background || "white";
+    const symbols = Object.keys(items);
+    this.lessons[id] = { id, name, background, items, symbols };
+    symbols.forEach(s => { 
+      if (!this.stats[s]) this.stats[s] = { c: 0, w: 0 }; 
+    });
+    return this.lessons[id];
+  }
+
+  isDone(symbol) {
+    const s = this.stats[symbol];
+    const done = s.c >= this.opts.requiredCorrect || s.w >= this.opts.maxErrors;
+    if (!done) console.log("Not Done", symbol, s.c, s.w, JSON.stringify(this.stats))
+    return done
+  }
+
+  calculateProgress() {
+    if (!this.currentLesson) return 0;
+    const totalSymbols = this.currentLesson.symbols.length;
+    const maxPoints = totalSymbols * this.opts.requiredCorrect;
+    const currentPoints = this.currentLesson.symbols.reduce((sum, s) => 
+      sum + Math.min(this.stats[s].c, this.opts.requiredCorrect), 0);
+    return Math.round((currentPoints / maxPoints) * 100);
+  }
+
+  renderStatus() {
+    const totalProgress = this.calculateProgress();
+    this.lessonTitle.textContent = this.currentLesson.name;
+    this.progressPercent.textContent = `${totalProgress}%`;
+    this.progressBar.style.width = `${totalProgress}%`;
+  }
+
+  renderLibrary() {
+    this.currentLesson = null;
+    this.statsWrapper.classList.add("d-none");
+    
+    let html = `<div class="row g-3 fade-in">`;
+    for (const id in this.lessons) {
+      const lesson = this.lessons[id];
+      const score = this.highscores[id] || 0;
+      
+      html += `
+        <div class="col-12">
+          <div class="card shadow-sm border-0 p-3 d-flex flex-row justify-content-between align-items-center" 
+               style="background: ${lesson.background}; border-radius: 12px; cursor: pointer; transition: transform 0.2s;" 
+               onclick="app.renderLessonPreview('${id}')"
+               onmouseover="this.style.transform='scale(1.01)'" 
+               onmouseout="this.style.transform='scale(1)'">
+            <div>
+              <h5 class="mb-0">${lesson.name}</h5>
+              <small class="text-muted">${lesson.symbols.length} Zeichen</small>
+            </div>
+            <div class="text-end">
+              <div class="small text-uppercase text-muted" style="font-size: 0.6rem;">Bestwert</div>
+              <span class="badge ${score === 100 ? 'bg-success' : 'bg-secondary'} rounded-pill px-3">${score}%</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    html += `</div>`;
+    this.contentArea.innerHTML = html;
+  }
+
+  playTone(type) {
+  // Falls noch kein Kontext existiert (sollte durch unlockAudio abgefangen sein)
+  if (!this.audioCtx) return;
+  
+  // Browser-Sicherheit: Kontext explizit fortsetzen
+  if (this.audioCtx.state === 'suspended') {
+    this.audioCtx.resume();
+  }
+
+  const now = this.audioCtx.currentTime;
+  const osc = this.audioCtx.createOscillator();
+  const gain = this.audioCtx.createGain();
+
+  osc.connect(gain);
+  gain.connect(this.audioCtx.destination);
+  osc.type = 'sine';
+
+  if (type === 'success') {
+    // Aufsteigend (Pling)
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(440, now + 0.4);
+  } else {
+    // Absteigend (Failure)
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(220, now + 0.4);
+  }
+
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.1, now + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+  osc.start(now);
+  osc.stop(now + 0.4);
+}
+
+  startLesson(id) {
+    this.currentLesson = this.lessons[id];
+    this.statsWrapper.classList.remove("d-none");
+    this.renderQuiz();
+  }
+
+  renderQuiz() {
+    console.log(JSON.stringify(this.currentLesson.symbols), "in current lesson")
+    const unfinished = this.currentLesson.symbols.filter(s => !this.isDone(s));
+    console.log(unfinished.length, " are unfinished", JSON.stringify(unfinished))
+    const pool = unfinished.slice(0, this.opts.activeLimit);
+    this.formatter = Math.random() < .5 ? this.opts.symbolFormatter : this.opts.reverseFormatter;
+    this.renderStatus();
+
+    // Abschlussprüfung
+    if (pool.length === 0) {
+      this.highscores[this.currentLesson.id] = 100;
+      localStorage.setItem('qatt_highscores', JSON.stringify(this.highscores));
+
+      this.contentArea.innerHTML = `
+        <div class="card p-5 text-center shadow border-0 fade-in" style="border-radius: 15px;">
+          <h2 class="mb-3">🎉 Lektion beendet!</h2>
+          <p class="text-muted">Du hast alle Zeichen bearbeitet. Dein Bestwert wurde gespeichert.</p>
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-lg" onclick="app.renderLibrary()">Zurück zur Übersicht</button>
+            <button class="btn btn-link text-danger btn-sm" onclick="app.resetCurrentStats()">Fortschritt dieser Lektion löschen</button>
+          </div>
+        </div>`;
+      return;
+    }
+
+    const correctSymbol = pool[Math.floor(Math.random() * pool.length)];
+    const correctValue = this.currentLesson.items[correctSymbol];
+    const stat = this.stats[correctSymbol];
+    const formatted = this.formatter(correctSymbol, correctValue)
+    this.contentArea.innerHTML = `
+      <div class="fade-in card shadow-sm border-0" style="background: ${this.currentLesson.background}; border-radius: 15px;">
+        <div class="p-4" style="background: rgba(255,255,255,.3)">
+          <div class="text-end mb-2">
+             <small class="text-muted" style="font-size: 0.7rem;">
+               Level: ✅${stat.c}/${this.opts.requiredCorrect} | ❌${stat.w}/${this.opts.maxErrors}
+             </small>
+          </div>
+          <div class="symbol-card mb-4 border" style="background: rgba(255,255,255,.99)">
+            ${formatted[0]}
+          </div>
+          <div class="options d-grid gap-2" style="grid-template-columns: 1fr 1fr;"></div>
+          <div id="feedback" class="feedback-area"></div>
+        </div>
+      </div>
+    `;
+
+    this.renderOptions(correctSymbol, correctValue);
+  }
+
+  renderOptions(correctSymbol, correctValue) {
+  const distractors = this.currentLesson.symbols
+    .filter(s => s !== correctSymbol)
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 3)
+    .map(s => ({
+      symbol: s,
+      value: this.currentLesson.items[s]
+    }));
+
+  const options = [
+    ...distractors,
+    { symbol: correctSymbol, value: correctValue }
+  ].sort(() => 0.5 - Math.random());
+
+  const container = this.contentArea.querySelector('.options');
+
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = "btn shadow btn-lg py-3";
+    btn.style.borderRadius = "12px";
+    btn.style.backgroundColor = "rgba(255,255,255,.75)";
+
+    btn.innerHTML = this.formatter(opt.symbol, opt.value)[1];
+
+    // WICHTIG:
+    btn.dataset.correct = (opt.symbol === correctSymbol);
+    btn.dataset.value = opt.value;
+
+    btn.onclick = () => this.checkAnswer(btn);
+
+    container.appendChild(btn);
+  });
+}
+  
+  checkAnswer(clickedBtn) {
+  const isCorrect = clickedBtn.dataset.correct === "true";
+  this.playTone(isCorrect ? 'success' : 'error');
+
+  const symbol = this.currentLesson.symbols.find(s =>
+    this.currentLesson.items[s] === clickedBtn.dataset.value
+  );
+console.log("Log answer", symbol, isCorrect)
+  if (isCorrect) this.stats[symbol].c++;
+  else this.stats[symbol].w++;
+
+  localStorage.setItem('qatt_stats', JSON.stringify(this.stats));
+
+  const buttons = this.contentArea.querySelectorAll(".btn");
+
+  buttons.forEach(b => {
+    b.disabled = true;
+    //b.style.backgroundColor = "auto";
+    b.style.backgroundColor = "";
+    b.classList.remove("btn-outline-primary")
+    if (b.dataset.correct === "true") {
+      b.classList.add("btn-success");
+    } else if (b === clickedBtn && !isCorrect) {
+      b.classList.add("btn-danger");
+    }
+  });
+
+  const feedback = this.contentArea.querySelector("#feedback");
+  feedback.innerHTML = `<div class="${isCorrect ? 'alert-custom-success' : 'alert-custom-danger'}">
+      ${isCorrect ? 'Richtig! ✨' : 'Falsch'}
+    </div>`;
+
+  feedback.classList.remove("float-up-fade");
+  void feedback.offsetWidth;
+  feedback.classList.add("float-up-fade");
+
+  setTimeout(() => this.renderQuiz(), isCorrect ? 1000 : 2200);
+}
+  
+  resetCurrentStats() {
+    if(confirm("Fortschritt dieser Lektion wirklich löschen?")) {
+      this.currentLesson.symbols.forEach(s => this.stats[s] = {c:0, w:0});
+      localStorage.setItem('qatt_stats', JSON.stringify(this.stats));
+      this.renderQuiz();
+    }
+  }
+  
+  renderLessonPreview(id) {
+  this.currentLesson = this.lessons[id];
+  this.statsWrapper.classList.add("d-none"); 
+  
+  let html = `
+    <div class="fade-in card shadow-sm p-4 border-0" style="background: ${this.currentLesson.background}; border-radius: 15px;">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0 text-dark">${this.currentLesson.name}</h3>
+        <button class="btn btn-sm btn-light border" onclick="app.renderLibrary()">Zurück</button>
+      </div>
+      
+      <div class="list-group mb-4 shadow-sm" style="max-height: 450px; overflow-y: auto; border-radius: 12px;">
+  `;
+
+  this.currentLesson.symbols.forEach(symbol => {
+    const value = this.currentLesson.items[symbol];
+    const stat = this.stats[symbol] || { c: 0, w: 0 };
+    const formatted = this.opts.symbolFormatter(symbol, value);
+    
+    // Fortschrittsberechnung für die visuelle Leiste
+    const itemProgress = Math.min(100, Math.round((stat.c / this.opts.requiredCorrect) * 100));
+    const isDone = itemProgress === 100;
+
+    html += `
+      <div class="list-group-item d-flex align-items-center p-3 border-0 border-bottom bg-white">
+        <div style="width: 35%">${formatted[0]}</div>
+        <div class="flex-grow-1 px-3">
+          <div class="fw-bold mb-1">${value}</div>
+        </div>
+        <div class="progress flex-shrink-0" style="width:25%; height: 4px; background-color: #eee;">
+          <div class="progress-bar ${isDone ? 'bg-success' : 'bg-info'}" 
+                 style="width: ${itemProgress}%"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+      <div class="d-grid">
+        <button class="btn btn-primary btn-lg shadow-sm" onclick="app.startLessonDirectly()">
+          Lektion jetzt starten
+        </button>
+      </div>
+    </div>
+  `;
+  
+  this.contentArea.innerHTML = html;
+}
+  
+  // Diese Methode wird jetzt vom "Start"-Button der Vorschau aufgerufen
+  startLessonDirectly() {
+    if (!this.currentLesson) return;
+    this.statsWrapper.classList.remove("d-none");
+    this.renderQuiz();
+  }
+}
+  </script>
+  
+  <script>
+ 
+  // Initialisierung nach dem Laden
+  const app = new App(document.getElementById("app"), {
+    symbolFormatter: (s, value) => {
+      return [
+        s.split(" ").map((i) => {
+          return `<img style="width:25%" src="https://chunom.org/media/generated/${i}-220.png">`
+        }).join(" "),
+        value
+      ]
+    },
+    reverseFormatter: (s, value) => {
+      return [
+        `<h1>${value}</h1>`, s.split(" ").map((i) => {
+          return `<img width="25%" src="https://chunom.org/media/generated/${i}-220.png">`
+        }).join(" ")
+      ]
+    },
+    soundProfile: "pling", // pling/blop
+    requiredCorrect: 2,
+    maxErrors: 3,
+    activeLimit: 3
+  });
+
+// Lektionen hinzufügen
+  
+  app.addLesson({
+    id: "lesson_1",
+    title: "Tập I — Cán Tự",
+    background: "#5ce",
+    items: {
+      "EE00": "?",
+      "EE01": "NG",
+      "EE02": "H",
+      "EE06": "TR",
+      "EE07": "Đ",
+      "EE08": "N",
+      "EE09": "T",
+      "EE0A": "TH",
+      "EE0B": "NH",
+      "EE0C": "CH",
+      "EE0D": "D",
+      "EE0E": "X",
+    }
+  });
+  
+  app.addLesson({
+    id: "lesson_2",
+    title: "Tập II — Chi tự",
+    background: "#fca",
+    items: {
+      "EE00 EE40 EE48": "ai",
+      "EE09 EE40": "ta",
+      "EE02 EE41": "hoa",
+      "EE12 EE42": "mơ",
+      "EE0C EE42 EE48": "chơi",
+      "EE43": "uơ",
+      "EE44": "ê",
+      "EE45": "uê",
+      "EE01 EE46": "nghe",
+      "EE46 EE3A": "em",
+      "EE47": "oe",
+      "EE07 EE48": "đi",
+      "EE49": "uy",
+      "EE4A": "ia",
+      "EE4B": "uya",
+      "EE4C": "ô",
+      "EE4D": "o",
+      "EE4E": "u",
+      "EE4F": "ua",
+      "EE50": "ư",
+      "EE51": "ưa",
+    }
+  });
+  
+  // Mit der Bibliothek starten
+  app.renderLibrary();
+
+  </script>
+</body>
+</html>
