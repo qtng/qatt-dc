@@ -310,6 +310,12 @@
     	var coda_prefix = "v2-";
     	var char_fontsize = "105px";
     	var qatt_tones = true;
+
+		if (window.location.hash.indexOf("simplified") > -1) {
+    		onset_prefix = "";
+    		vowel_prefix = "";
+    		coda_prefix = "";
+		}
     	
     	var svgns = "http://www.w3.org/2000/svg";
     	var xlinkns = "http://www.w3.org/1999/xlink";
@@ -483,7 +489,6 @@ window.paChr = paChr
 const chars = [];
 Array.from(document.querySelectorAll("tt")).forEach(el => {
 	const t = el.innerText;
-	console.log(`[${t}]`)
 	el.innerHTML = "";
 	el.dataset.codes = t;
 	pa(t, el)
@@ -491,6 +496,8 @@ Array.from(document.querySelectorAll("tt")).forEach(el => {
 });
 
 window.changetype = (type) => {
+	history.replaceState(null, "", type ? "#" : "#simplified");
+	
 	//qatt_tones = type
 	onset_prefix = type ? "v2-" : "";
     vowel_prefix = onset_prefix;
