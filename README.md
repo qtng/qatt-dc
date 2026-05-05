@@ -1,5 +1,5 @@
-# qatt-dc
+# Page moved
 
-legacy repo for redirection only.
+This page has moved to
 
-New repo -> https://github.com/qtng/qatt
+[https://github.com/qtng/qatt](https://github.com/qtng/qatt)
